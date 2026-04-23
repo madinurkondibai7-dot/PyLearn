@@ -1,0 +1,2834 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PyLearn KZ — Python алгоритмдері курсы</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --bg2: #0f1629;
+    --bg3: #141d35;
+    --card: #1a2340;
+    --card2: #1f2b4a;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --accent4: #f59e0b;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #64748b;
+    --border: rgba(0,212,255,0.15);
+    --glow: 0 0 30px rgba(0,212,255,0.2);
+    --font-head: 'Syne', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+  }
+
+  /* BACKGROUND GRID */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAVBAR */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background: rgba(10,14,26,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--text2); }
+
+  .nav-links {
+    display: flex;
+    gap: 0.25rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .nav-links a:hover, .nav-links a.active {
+    color: var(--accent);
+    background: rgba(0,212,255,0.08);
+  }
+
+  .nav-progress {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--text2);
+  }
+  .nav-xp {
+    background: rgba(124,58,237,0.2);
+    border: 1px solid rgba(124,58,237,0.4);
+    color: #a78bfa;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  /* SECTIONS */
+  section {
+    display: none;
+    min-height: 100vh;
+    padding-top: 64px;
+    position: relative;
+    z-index: 1;
+  }
+  section.active { display: block; }
+
+  /* ===== HOME ===== */
+  .hero {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.3);
+    color: var(--accent);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    animation: fadeIn 0.6s ease;
+  }
+
+  .hero h1 {
+    font-family: var(--font-head);
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 1.5rem;
+    animation: slideUp 0.7s ease;
+  }
+
+  .hero h1 .accent { color: var(--accent); }
+  .hero h1 .accent2 { color: #a78bfa; }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--text2);
+    max-width: 600px;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    animation: slideUp 0.8s ease;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: slideUp 0.9s ease;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #0a0e1a;
+    padding: 0.85rem 2rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .btn-primary:hover {
+    background: #33dcff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,212,255,0.35);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    padding: 0.85rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,212,255,0.05);
+  }
+
+  /* STATS */
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    padding: 2rem;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+  }
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* FEATURES GRID */
+  .section-title {
+    font-family: var(--font-head);
+    font-size: 2rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 0.75rem;
+    letter-spacing: -1px;
+  }
+  .section-sub {
+    text-align: center;
+    color: var(--text2);
+    margin-bottom: 3rem;
+    font-size: 1rem;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    padding: 2rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .feature-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .feature-card:hover {
+    border-color: rgba(0,212,255,0.3);
+    transform: translateY(-4px);
+    background: var(--card2);
+    box-shadow: var(--glow);
+  }
+  .feature-card:hover::before { opacity: 1; }
+
+  .feature-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .feature-card h3 {
+    font-family: var(--font-head);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+  .feature-card p {
+    font-size: 0.875rem;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  /* CURRICULUM */
+  .curriculum-section {
+    padding: 4rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .module-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+
+  .module-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .module-card:hover {
+    border-color: var(--accent);
+    background: var(--card2);
+    transform: translateX(4px);
+  }
+
+  .module-num {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+    background: rgba(0,212,255,0.1);
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    min-width: 40px;
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .module-info h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+  }
+  .module-info p {
+    font-size: 0.78rem;
+    color: var(--text3);
+  }
+
+  .module-tag {
+    margin-left: auto;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 10px;
+    white-space: nowrap;
+  }
+  .tag-easy { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+  .tag-med { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+  .tag-hard { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+
+  /* ===== LESSONS ===== */
+  .lessons-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: calc(100vh - 64px);
+  }
+
+  .sidebar {
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 1.5rem 1rem;
+    overflow-y: auto;
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 64px);
+  }
+
+  .sidebar h3 {
+    font-family: var(--font-head);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 0.2rem;
+    font-size: 0.875rem;
+    color: var(--text2);
+    border: 1px solid transparent;
+  }
+  .sidebar-item:hover {
+    background: rgba(0,212,255,0.06);
+    color: var(--text);
+  }
+  .sidebar-item.active {
+    background: rgba(0,212,255,0.1);
+    color: var(--accent);
+    border-color: rgba(0,212,255,0.2);
+  }
+  .sidebar-item.completed .check { color: var(--accent3); }
+
+  .lesson-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--text3);
+    flex-shrink: 0;
+  }
+  .sidebar-item.active .lesson-dot { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+  .sidebar-item.completed .lesson-dot { background: var(--accent3); }
+
+  /* LESSON CONTENT */
+  .lesson-content {
+    padding: 2.5rem 3rem;
+    max-width: 860px;
+  }
+
+  .lesson-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .lesson-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    background: rgba(0,212,255,0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    margin-bottom: 0.75rem;
+  }
+
+  .lesson-content h1 {
+    font-family: var(--font-head);
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 0.75rem;
+  }
+
+  .lesson-content h2 {
+    font-family: var(--font-head);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 2rem 0 1rem;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .lesson-content h2::before {
+    content: '';
+    display: block;
+    width: 3px; height: 1.2em;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  .lesson-content p {
+    color: var(--text2);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: #060a14;
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+    position: relative;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 1rem;
+    background: rgba(0,212,255,0.05);
+    border-bottom: 1px solid rgba(0,212,255,0.1);
+  }
+
+  .code-lang {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .copy-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text3);
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-mono);
+  }
+  .copy-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+  .code-block pre {
+    padding: 1.25rem 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: #e2e8f0;
+    overflow-x: auto;
+  }
+
+  /* Syntax highlighting */
+  .kw { color: #c792ea; }
+  .fn { color: #82aaff; }
+  .str { color: #c3e88d; }
+  .num { color: #f78c6c; }
+  .cm { color: #546e7a; font-style: italic; }
+  .op { color: #89ddff; }
+  .var { color: #eeffff; }
+  .bl { color: #ffcb6b; }
+
+  /* INFO BOX */
+  .info-box {
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .info-box.tip {
+    background: rgba(16,185,129,0.08);
+    border: 1px solid rgba(16,185,129,0.25);
+  }
+  .info-box.note {
+    background: rgba(0,212,255,0.06);
+    border: 1px solid rgba(0,212,255,0.2);
+  }
+  .info-box.warn {
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.25);
+  }
+  .info-box-icon { font-size: 1.2rem; flex-shrink: 0; }
+  .info-box p { margin: 0; font-size: 0.875rem; line-height: 1.6; }
+  .info-box.tip p { color: #6ee7b7; }
+  .info-box.note p { color: #7dd3fc; }
+  .info-box.warn p { color: #fcd34d; }
+
+  /* TASK BOX */
+  .task-box {
+    background: rgba(124,58,237,0.08);
+    border: 1px solid rgba(124,58,237,0.3);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+  .task-box h4 {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: #a78bfa;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .task-box p { font-size: 0.9rem; color: var(--text2); margin: 0; line-height: 1.7; }
+
+  /* NAV BUTTONS */
+  .lesson-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn-lesson {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    padding: 0.7rem 1.25rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    font-family: var(--font-body);
+  }
+  .btn-lesson:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,212,255,0.05);
+  }
+
+  .btn-complete {
+    background: var(--accent3);
+    color: #064e3b;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+  }
+  .btn-complete:hover {
+    background: #34d399;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(16,185,129,0.3);
+  }
+
+  /* ===== INTERACTIVE ===== */
+  .interactive-layout {
+    padding: 2rem 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .page-title {
+    font-family: var(--font-head);
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 0.5rem;
+  }
+  .page-sub {
+    color: var(--text2);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+
+  .editor-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .editor-panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: rgba(0,212,255,0.04);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .panel-title {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .panel-dots {
+    display: flex;
+    gap: 5px;
+  }
+  .panel-dots span {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .panel-dots span:nth-child(1) { background: #ff5f56; }
+  .panel-dots span:nth-child(2) { background: #ffbd2e; }
+  .panel-dots span:nth-child(3) { background: #27c93f; }
+
+  #code-editor {
+    width: 100%;
+    height: 320px;
+    background: #060a14;
+    color: #e2e8f0;
+    border: none;
+    padding: 1.25rem 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.7;
+    resize: none;
+    outline: none;
+  }
+
+  .output-area {
+    padding: 1.25rem 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: #c3e88d;
+    min-height: 320px;
+    background: #060a14;
+    white-space: pre-wrap;
+  }
+
+  .editor-toolbar {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .btn-run {
+    background: var(--accent3);
+    color: #064e3b;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+  }
+  .btn-run:hover {
+    background: #34d399;
+    box-shadow: 0 4px 15px rgba(16,185,129,0.3);
+  }
+
+  .btn-clear {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text3);
+    padding: 0.6rem 1rem;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  .btn-clear:hover { border-color: #ef4444; color: #ef4444; }
+
+  /* CHALLENGES */
+  .challenges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .challenge-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .challenge-card:hover {
+    border-color: rgba(0,212,255,0.3);
+    transform: translateY(-3px);
+  }
+
+  .challenge-card h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .challenge-card p {
+    font-size: 0.8rem;
+    color: var(--text2);
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .diff-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 10px;
+  }
+
+  /* ===== AI ASSISTANT ===== */
+  .ai-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 0;
+    height: calc(100vh - 64px);
+  }
+
+  .chat-area {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .chat-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .ai-avatar {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+  }
+
+  .ai-status {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--accent3);
+  }
+  .ai-status::before {
+    content: '';
+    width: 7px; height: 7px;
+    background: var(--accent3);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .message {
+    display: flex;
+    gap: 0.75rem;
+    max-width: 80%;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .message.user { align-self: flex-end; flex-direction: row-reverse; }
+
+  .msg-avatar {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+  .msg-avatar.ai { background: linear-gradient(135deg, var(--accent), var(--accent2)); }
+  .msg-avatar.user { background: rgba(124,58,237,0.3); border: 1px solid rgba(124,58,237,0.4); }
+
+  .msg-bubble {
+    padding: 0.75rem 1.1rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  .message.ai .msg-bubble {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .message.user .msg-bubble {
+    background: rgba(124,58,237,0.2);
+    border: 1px solid rgba(124,58,237,0.3);
+    color: var(--text);
+  }
+
+  .msg-code {
+    background: #060a14;
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    margin-top: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: #c3e88d;
+    overflow-x: auto;
+  }
+
+  .chat-input-area {
+    padding: 1.25rem 2rem;
+    border-top: 1px solid var(--border);
+    background: var(--bg2);
+  }
+
+  .input-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-end;
+  }
+
+  #ai-input {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    resize: none;
+    outline: none;
+    transition: border-color 0.2s;
+    min-height: 44px;
+    max-height: 120px;
+  }
+  #ai-input:focus { border-color: var(--accent); }
+  #ai-input::placeholder { color: var(--text3); }
+
+  .btn-send {
+    background: var(--accent);
+    color: #0a0e1a;
+    border: none;
+    width: 42px; height: 42px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .btn-send:hover {
+    background: #33dcff;
+    transform: scale(1.05);
+  }
+
+  /* QUICK PROMPTS */
+  .quick-prompts {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+  .quick-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    padding: 0.35rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .quick-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* AI SIDEBAR */
+  .ai-sidebar {
+    background: var(--bg2);
+    border-left: 1px solid var(--border);
+    padding: 1.5rem;
+    overflow-y: auto;
+  }
+
+  .ai-sidebar h3 {
+    font-family: var(--font-head);
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .capability-item {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    padding: 0.75rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+  }
+  .cap-icon { font-size: 1.1rem; flex-shrink: 0; }
+  .cap-text h4 { font-size: 0.8rem; font-weight: 600; margin-bottom: 0.2rem; }
+  .cap-text p { font-size: 0.75rem; color: var(--text3); line-height: 1.4; }
+
+  /* ===== PROGRESS ===== */
+  .progress-layout {
+    padding: 2rem 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .progress-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .user-avatar-big {
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    flex-shrink: 0;
+  }
+
+  .user-meta h2 {
+    font-family: var(--font-head);
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+  }
+  .user-meta p { color: var(--text2); font-size: 0.9rem; }
+
+  .user-stats {
+    display: flex;
+    gap: 1.5rem;
+    margin-left: auto;
+    flex-wrap: wrap;
+  }
+
+  .user-stat {
+    text-align: center;
+    background: var(--bg3);
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .user-stat-num {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: block;
+  }
+  .user-stat-num.cyan { color: var(--accent); }
+  .user-stat-num.purple { color: #a78bfa; }
+  .user-stat-num.green { color: var(--accent3); }
+  .user-stat-label {
+    font-size: 0.75rem;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* PROGRESS BAR */
+  .overall-progress {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+  }
+  .progress-label span:first-child { color: var(--text); font-weight: 600; }
+  .progress-label span:last-child { color: var(--accent); font-family: var(--font-mono); }
+
+  .progress-bar-bg {
+    background: var(--bg3);
+    border-radius: 10px;
+    height: 10px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 1s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+  }
+
+  /* LESSONS PROGRESS */
+  .modules-progress {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .module-progress-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .module-progress-item:last-child { border-bottom: none; }
+
+  .mp-icon { font-size: 1.1rem; width: 28px; text-align: center; }
+  .mp-name { font-size: 0.875rem; flex: 1; }
+  .mp-bar-bg { flex: 2; background: var(--bg3); border-radius: 6px; height: 6px; }
+  .mp-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--accent3), var(--accent));
+  }
+  .mp-pct {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text2);
+    width: 40px;
+    text-align: right;
+  }
+  .mp-status { font-size: 0.9rem; width: 20px; text-align: center; }
+
+  /* BADGES */
+  .badges-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+
+  .badges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .badge-item {
+    text-align: center;
+    padding: 1rem 0.5rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    transition: all 0.2s;
+  }
+  .badge-item.earned {
+    border-color: rgba(245,158,11,0.4);
+    background: rgba(245,158,11,0.08);
+  }
+  .badge-item:not(.earned) { opacity: 0.35; filter: grayscale(1); }
+  .badge-icon { font-size: 2rem; display: block; margin-bottom: 0.4rem; }
+  .badge-name { font-size: 0.7rem; color: var(--text2); }
+
+  /* ===== TEST ===== */
+  .test-layout {
+    padding: 2rem 3rem;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .test-select {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .test-module-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .test-module-card:hover {
+    border-color: var(--accent);
+    background: var(--card2);
+  }
+  .test-module-card h4 { font-size: 0.9rem; margin-bottom: 0.25rem; }
+  .test-module-card p { font-size: 0.75rem; color: var(--text3); }
+  .test-module-card .test-icon { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
+
+  /* QUIZ */
+  .quiz-container {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+  }
+
+  .quiz-progress-bar {
+    background: var(--bg3);
+    border-radius: 6px;
+    height: 4px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+  .quiz-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 6px;
+    transition: width 0.4s ease;
+  }
+
+  .question-num {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .question-text {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+
+  .option-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.9rem 1.25rem;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 0.6rem;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    font-family: var(--font-body);
+  }
+  .option-btn:hover {
+    border-color: var(--accent);
+    background: rgba(0,212,255,0.05);
+  }
+  .option-btn.selected {
+    border-color: var(--accent);
+    background: rgba(0,212,255,0.1);
+    color: var(--accent);
+  }
+  .option-btn.correct {
+    border-color: var(--accent3);
+    background: rgba(16,185,129,0.15);
+    color: #6ee7b7;
+  }
+  .option-btn.wrong {
+    border-color: #ef4444;
+    background: rgba(239,68,68,0.1);
+    color: #f87171;
+  }
+
+  .btn-next {
+    background: var(--accent);
+    color: #0a0e1a;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    transition: all 0.2s;
+    display: none;
+  }
+  .btn-next.show { display: inline-block; }
+  .btn-next:hover { background: #33dcff; }
+
+  /* RESULT */
+  .quiz-result {
+    text-align: center;
+    padding: 2rem;
+  }
+  .result-circle {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(var(--accent) var(--pct), var(--bg3) 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    position: relative;
+  }
+  .result-circle-inner {
+    width: 90px; height: 90px;
+    background: var(--card);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .result-msg {
+    font-family: var(--font-head);
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+  .result-sub { color: var(--text2); font-size: 0.9rem; }
+
+  /* ===== CERTIFICATE ===== */
+  .cert-layout {
+    padding: 2rem 3rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .cert-wrapper {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cert-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(circle at 20% 20%, rgba(0,212,255,0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(124,58,237,0.05) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .cert-border {
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 3rem;
+    background-clip: padding-box;
+    position: relative;
+  }
+  .cert-border::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3), var(--accent));
+    z-index: -1;
+  }
+
+  .cert-logo {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .cert-title {
+    font-family: var(--font-head);
+    font-size: 0.85rem;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 2rem;
+  }
+
+  .cert-main-text {
+    font-size: 0.9rem;
+    color: var(--text2);
+    margin-bottom: 0.75rem;
+  }
+
+  .cert-name {
+    font-family: var(--font-head);
+    font-size: 2.8rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(90deg, var(--accent), #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.75rem;
+  }
+
+  .cert-course {
+    font-family: var(--font-head);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 2rem;
+  }
+
+  .cert-details {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .cert-detail {
+    text-align: center;
+  }
+  .cert-detail-label { font-size: 0.75rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; }
+  .cert-detail-value { font-family: var(--font-mono); font-size: 0.9rem; color: var(--text); margin-top: 0.25rem; }
+
+  .cert-seal {
+    font-size: 4rem;
+    margin: 1rem 0;
+    filter: drop-shadow(0 0 15px rgba(245,158,11,0.5));
+  }
+
+  .cert-locked {
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+  .cert-locked-icon { font-size: 4rem; margin-bottom: 1rem; }
+  .cert-locked h3 {
+    font-family: var(--font-head);
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .cert-locked p { color: var(--text2); margin-bottom: 1.5rem; }
+
+  .cert-progress-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 400px;
+    margin: 0 auto 2rem;
+  }
+  .cert-req {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--text2);
+    text-align: left;
+  }
+  .cert-req .req-icon { font-size: 1rem; }
+  .cert-req.done { color: var(--accent3); }
+
+  /* ANIMATIONS */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  @keyframes typing {
+    0%, 80%, 100% { opacity: 0; transform: scale(0.8); }
+    40% { opacity: 1; transform: scale(1); }
+  }
+
+  .typing-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin: 0 2px;
+    animation: typing 1.4s infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--card2); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.75rem 1.25rem;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    animation: fadeIn 0.3s ease;
+    max-width: 320px;
+  }
+  .toast.success { border-color: rgba(16,185,129,0.4); }
+  .toast.info { border-color: rgba(0,212,255,0.4); }
+
+  @media (max-width: 768px) {
+    .lessons-layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .editor-container { grid-template-columns: 1fr; }
+    .ai-layout { grid-template-columns: 1fr; }
+    .ai-sidebar { display: none; }
+    .features-grid { padding: 1rem; }
+    .lesson-content { padding: 1.5rem; }
+    .progress-header { flex-direction: column; text-align: center; }
+    .user-stats { justify-content: center; }
+    nav { padding: 0 1rem; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">Py<span>Learn</span>.kz</div>
+  <ul class="nav-links">
+    <li><a onclick="showSection('home')" class="active" id="nav-home">🏠 Басты бет</a></li>
+    <li><a onclick="showSection('lessons')" id="nav-lessons">📚 Сабақтар</a></li>
+    <li><a onclick="showSection('interactive')" id="nav-interactive">⚡ Тапсырмалар</a></li>
+    <li><a onclick="showSection('ai')" id="nav-ai">🤖 AI Көмекші</a></li>
+    <li><a onclick="showSection('progress')" id="nav-progress">📊 Прогресс</a></li>
+    <li><a onclick="showSection('test')" id="nav-test">✏️ Тест</a></li>
+    <li><a onclick="showSection('certificate')" id="nav-certificate">🏆 Сертификат</a></li>
+  </ul>
+  <div class="nav-progress">
+    <span>XP: <strong id="xp-display">0</strong></span>
+    <div class="nav-xp" id="level-display">Деңгей 1</div>
+  </div>
+</nav>
+
+<!-- ===== HOME ===== -->
+<section id="home" class="active">
+  <div class="hero">
+    <div class="hero-badge">🐍 Python Алгоритмдері · Толық Курс</div>
+    <h1>
+      Алгоритмдерді<br>
+      <span class="accent">Python</span> тілінде<br>
+      үйрен <span class="accent2">оңай</span>
+    </h1>
+    <p>
+      Мектеп оқушылары мен студенттерге арналған интерактивті оқу платформасы. 
+      Нөлден бастап алгоритмдер мен деректер құрылымдарын меңгер.
+    </p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showSection('lessons')">🚀 Оқуды бастау</button>
+      <button class="btn-secondary" onclick="showSection('ai')">🤖 AI-мен сөйлес</button>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat"><span class="stat-num">9</span><span class="stat-label">Модуль</span></div>
+    <div class="stat"><span class="stat-num">45+</span><span class="stat-label">Сабақ</span></div>
+    <div class="stat"><span class="stat-num">30+</span><span class="stat-label">Тапсырма</span></div>
+    <div class="stat"><span class="stat-num">100%</span><span class="stat-label">Тегін</span></div>
+  </div>
+
+  <div style="padding: 1rem 3rem 3rem; max-width: 1200px; margin: 0 auto;">
+    <div class="section-title">Не үйренесің?</div>
+    <div class="section-sub">Курс бітіргеннен кейін Python-да алгоритмдерді еркін жаза аласың</div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">🐍</span>
+        <h3>Python негіздері</h3>
+        <p>Айнымалылар, деректер типтері, шарттар, циклдер — бәрін қарапайым тілде түсінесің</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">⚙️</span>
+        <h3>Алгоритм логикасы</h3>
+        <p>Есептерді кезең-кезеңімен шешу тәсілдерін, блок-схемалар мен псевдокодты меңгересің</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📊</span>
+        <h3>Сұрыптау алгоритмдері</h3>
+        <p>Bubble Sort, Selection Sort, Insertion Sort, Merge Sort — анимациямен түсінесің</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🔍</span>
+        <h3>Іздеу алгоритмдері</h3>
+        <p>Linear Search, Binary Search — нақты кодпен және визуализациямен</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🤖</span>
+        <h3>AI Көмекші</h3>
+        <p>Кез келген сұрағыңа жауап алу, кодыңдағы қателерді тауып түзетуге көмек</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🏆</span>
+        <h3>Сертификат</h3>
+        <p>Курсты аяқтаған соң ресми сертификат алып, портфолиоңа қосасың</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="curriculum-section">
+    <div class="section-title">Курс бағдарламасы</div>
+    <div class="section-sub">9 модуль · Қарапайымнан күрделіге</div>
+    <div class="module-grid">
+      <div class="module-card" onclick="openLesson(0)">
+        <div class="module-num">01</div>
+        <div class="module-info"><h4>Python тіліне кіріспе</h4><p>Орнату, IDLE, алғашқы бағдарлама</p></div>
+        <div class="module-tag tag-easy">Оңай</div>
+      </div>
+      <div class="module-card" onclick="openLesson(1)">
+        <div class="module-num">02</div>
+        <div class="module-info"><h4>Алгоритм ұғымы</h4><p>Не бұл алгоритм, блок-схема</p></div>
+        <div class="module-tag tag-easy">Оңай</div>
+      </div>
+      <div class="module-card" onclick="openLesson(2)">
+        <div class="module-num">03</div>
+        <div class="module-info"><h4>Айнымалылар мен деректер</h4><p>int, str, float, list, dict</p></div>
+        <div class="module-tag tag-easy">Оңай</div>
+      </div>
+      <div class="module-card" onclick="openLesson(3)">
+        <div class="module-num">04</div>
+        <div class="module-info"><h4>Шартты операторлар</h4><p>if, elif, else конструкциялары</p></div>
+        <div class="module-tag tag-easy">Оңай</div>
+      </div>
+      <div class="module-card" onclick="openLesson(4)">
+        <div class="module-num">05</div>
+        <div class="module-info"><h4>Циклдер</h4><p>for, while, break, continue</p></div>
+        <div class="module-tag tag-med">Орташа</div>
+      </div>
+      <div class="module-card" onclick="openLesson(5)">
+        <div class="module-num">06</div>
+        <div class="module-info"><h4>Функциялар</h4><p>def, параметрлер, return, рекурсия</p></div>
+        <div class="module-tag tag-med">Орташа</div>
+      </div>
+      <div class="module-card" onclick="openLesson(6)">
+        <div class="module-num">07</div>
+        <div class="module-info"><h4>Сұрыптау алгоритмдері</h4><p>Bubble, Selection, Merge Sort</p></div>
+        <div class="module-tag tag-med">Орташа</div>
+      </div>
+      <div class="module-card" onclick="openLesson(7)">
+        <div class="module-num">08</div>
+        <div class="module-info"><h4>Іздеу алгоритмдері</h4><p>Linear, Binary Search</p></div>
+        <div class="module-tag tag-hard">Күрделі</div>
+      </div>
+      <div class="module-card" onclick="openLesson(8)">
+        <div class="module-num">09</div>
+        <div class="module-info"><h4>Практикалық есептер</h4><p>Нақты жобалар, финалдық тест</p></div>
+        <div class="module-tag tag-hard">Күрделі</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LESSONS ===== -->
+<section id="lessons">
+  <div class="lessons-layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <h3>Модульдер</h3>
+      <div id="sidebar-items"></div>
+    </div>
+
+    <!-- LESSON BODY -->
+    <div class="lesson-content" id="lesson-body">
+      <!-- Content injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ===== INTERACTIVE ===== -->
+<section id="interactive">
+  <div class="interactive-layout">
+    <div class="page-title">⚡ Интерактивті тапсырмалар</div>
+    <div class="page-sub">Код жазып, нәтижені тікелей браузерде тексер</div>
+
+    <div class="editor-container">
+      <div class="editor-panel">
+        <div class="panel-header">
+          <div class="panel-title">🐍 Python Редактор</div>
+          <div class="panel-dots"><span></span><span></span><span></span></div>
+        </div>
+        <textarea id="code-editor" spellcheck="false"># Бірінші бағдарламаңды жаз!
+# Python-да print() функциясы нәтижені экранға шығарады
+
+name = "Әлі"
+age = 15
+
+print("Сәлем,", name + "!")
+print("Жасың:", age, "жас")
+print("5 жылдан кейін:", age + 5, "жас болады")
+
+# Тізімдерді пайдалану
+fruits = ["алма", "алмұрт", "жүзім"]
+for fruit in fruits:
+    print("Жеміс:", fruit)
+</textarea>
+      </div>
+      <div class="editor-panel">
+        <div class="panel-header">
+          <div class="panel-title">📟 Нәтиже</div>
+          <div class="panel-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="output-area" id="code-output">▶ Кодты іске қосу үшін "Запустить" батырмасын басыңыз...</div>
+      </div>
+    </div>
+
+    <div class="editor-toolbar">
+      <button class="btn-run" onclick="runCode()">▶ Іске қосу</button>
+      <button class="btn-clear" onclick="clearCode()">🗑 Тазалау</button>
+      <button class="btn-secondary" onclick="loadChallenge(currentChallenge)" style="padding:0.6rem 1rem;font-size:0.85rem;">🔄 Тапсырманы жүктеу</button>
+    </div>
+
+    <div style="margin-top:2.5rem;">
+      <div class="section-title" style="font-size:1.4rem;text-align:left;margin-bottom:0.5rem;">Практикалық тапсырмалар</div>
+      <p style="color:var(--text2);font-size:0.875rem;margin-bottom:1.5rem;">Тапсырманы таңдап, редакторда шеш</p>
+      <div class="challenges-grid" id="challenges-grid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AI ASSISTANT ===== -->
+<section id="ai">
+  <div class="ai-layout">
+    <div class="chat-area">
+      <div class="chat-header">
+        <div class="ai-avatar">🤖</div>
+        <div>
+          <strong style="font-family:var(--font-head);font-size:1rem;">PyBot — AI Көмекші</strong>
+          <div class="ai-status">Онлайн · Дайын</div>
+        </div>
+      </div>
+
+      <div class="messages" id="messages">
+        <div class="message ai">
+          <div class="msg-avatar ai">🤖</div>
+          <div class="msg-bubble">
+            <strong>Сәлем! Мен PyBot — сенің Python оқу жолдасың! 🐍</strong><br><br>
+            Мен саған мыналарда көмектесе аламын:<br>
+            • Python синтаксисін түсіндіру<br>
+            • Кодыңдағы қателерді табу<br>
+            • Алгоритмдерді қадам-қадам түсіндіру<br>
+            • Кодыңды жақсарту бойынша кеңес беру<br><br>
+            Қандай сұрағың бар? 😊
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input-area">
+        <div class="quick-prompts">
+          <button class="quick-btn" onclick="quickAsk('for цикл қалай жұмыс істейді?')">for цикл</button>
+          <button class="quick-btn" onclick="quickAsk('Bubble Sort алгоритмін түсіндір')">Bubble Sort</button>
+          <button class="quick-btn" onclick="quickAsk('функция жасау мысалы')">Функция мысалы</button>
+          <button class="quick-btn" onclick="quickAsk('рекурсия дегеніміз не?')">Рекурсия</button>
+          <button class="quick-btn" onclick="quickAsk('list пен dict айырмашылығы')">list vs dict</button>
+        </div>
+        <div class="input-row">
+          <textarea id="ai-input" placeholder="Сұрағыңды жаз... (мысалы: while цикл қалай жұмыс істейді?)" rows="1" onkeydown="handleEnter(event)"></textarea>
+          <button class="btn-send" onclick="sendMessage()">➤</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-sidebar">
+      <h3>🧠 AI Мүмкіндіктері</h3>
+      <div class="capability-item">
+        <div class="cap-icon">💬</div>
+        <div class="cap-text">
+          <h4>Сұрақтарға жауап</h4>
+          <p>Python, алгоритмдер, синтаксис бойынша кез келген сұрақ</p>
+        </div>
+      </div>
+      <div class="capability-item">
+        <div class="cap-icon">🔍</div>
+        <div class="cap-text">
+          <h4>Қате анализі</h4>
+          <p>Кодыңды жіберсең, қателерді тауып түсіндіреді</p>
+        </div>
+      </div>
+      <div class="capability-item">
+        <div class="cap-icon">📖</div>
+        <div class="cap-text">
+          <h4>Алгоритм түсіндіру</h4>
+          <p>Кез келген алгоритмді қадам-қадам визуалды түрде</p>
+        </div>
+      </div>
+      <div class="capability-item">
+        <div class="cap-icon">✨</div>
+        <div class="cap-text">
+          <h4>Кодты жақсарту</h4>
+          <p>Кодыңды оңтайландыру бойынша нақты ұсыныстар</p>
+        </div>
+      </div>
+      <div class="capability-item">
+        <div class="cap-icon">🎯</div>
+        <div class="cap-text">
+          <h4>Мысал жасау</h4>
+          <p>Тақырып бойынша нақты код мысалдарын жазады</p>
+        </div>
+      </div>
+
+      <div style="margin-top:1.5rem;">
+        <h3>📌 Кеңестер</h3>
+        <div style="font-size:0.8rem;color:var(--text2);line-height:1.7;margin-top:0.5rem;">
+          • Кодыңды тікелей чатқа жіберуге болады<br>
+          • Мысал сұрасаң, нақты атаулармен сұра<br>
+          • "Неге қате?" деп сұра — түсіндіреді<br>
+          • Қазақша да, орысша да жаз
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROGRESS ===== -->
+<section id="progress">
+  <div class="progress-layout">
+    <div class="page-title">📊 Оқу прогресі</div>
+    <div class="page-sub" style="margin-bottom:2rem;">Жетістіктерің мен статистикаң</div>
+
+    <div class="progress-header">
+      <div class="user-avatar-big">👨‍🎓</div>
+      <div class="user-meta">
+        <h2>Оқушы</h2>
+        <p>PyLearn.kz студенті · Python жолы</p>
+      </div>
+      <div class="user-stats">
+        <div class="user-stat">
+          <span class="user-stat-num cyan" id="stat-completed">0</span>
+          <span class="user-stat-label">Өткен сабақ</span>
+        </div>
+        <div class="user-stat">
+          <span class="user-stat-num purple" id="stat-xp">0</span>
+          <span class="user-stat-label">XP ұпай</span>
+        </div>
+        <div class="user-stat">
+          <span class="user-stat-num green" id="stat-streak">0</span>
+          <span class="user-stat-label">Күн қатарынан</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="overall-progress">
+      <div class="progress-label">
+        <span>Жалпы прогресс</span>
+        <span id="overall-pct">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="overall-bar" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="modules-progress">
+      <div class="section-title" style="font-size:1.1rem;text-align:left;margin-bottom:1rem;">Модульдер бойынша прогресс</div>
+      <div id="module-progress-list"></div>
+    </div>
+
+    <div class="badges-section">
+      <div class="section-title" style="font-size:1.1rem;text-align:left;">🏅 Жетістіктер (Badges)</div>
+      <p style="font-size:0.8rem;color:var(--text3);margin-top:0.25rem;">Сабақтарды өтіп жетістіктер жина!</p>
+      <div class="badges-grid" id="badges-grid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TEST ===== -->
+<section id="test">
+  <div class="test-layout">
+    <div class="page-title">✏️ Тест және Бағалау</div>
+    <div class="page-sub" style="margin-bottom:2rem;">Білімінді тексер — модуль бойынша тест тап</div>
+
+    <div id="test-select-area">
+      <div class="test-select" id="test-module-select"></div>
+    </div>
+
+    <div id="quiz-area" style="display:none;">
+      <div class="quiz-container">
+        <div class="quiz-progress-bar">
+          <div class="quiz-progress-fill" id="quiz-progress-fill" style="width:0%"></div>
+        </div>
+        <div class="question-num" id="question-num">Сұрақ 1/5</div>
+        <div class="question-text" id="question-text"></div>
+        <div id="options-area"></div>
+        <button class="btn-next" id="btn-next" onclick="nextQuestion()">Келесі →</button>
+      </div>
+    </div>
+
+    <div id="result-area" style="display:none;">
+      <div class="quiz-container">
+        <div class="quiz-result">
+          <div class="result-circle" style="--pct: calc(var(--score) * 1%)">
+            <div class="result-circle-inner" id="result-pct"></div>
+          </div>
+          <div class="result-msg" id="result-msg"></div>
+          <div class="result-sub" id="result-sub"></div>
+          <div style="margin-top:1.5rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+            <button class="btn-primary" onclick="restartQuiz()">🔄 Қайта тапсыру</button>
+            <button class="btn-secondary" onclick="backToSelect()">← Модуль таңдау</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CERTIFICATE ===== -->
+<section id="certificate">
+  <div class="cert-layout">
+    <div class="page-title">🏆 Сертификат</div>
+    <div class="page-sub" style="margin-bottom:2rem;">Курсты аяқтаған соң сертификат алу</div>
+
+    <div id="cert-locked-view">
+      <div class="cert-wrapper">
+        <div class="cert-locked">
+          <div class="cert-locked-icon">🔒</div>
+          <h3>Сертификат сені күтіп тұр!</h3>
+          <p>Сертификат алу үшін мына талаптарды орындау керек:</p>
+          <div class="cert-progress-items" id="cert-requirements"></div>
+          <button class="btn-primary" onclick="showSection('lessons')">📚 Оқуды жалғастыру</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="cert-unlocked-view" style="display:none;">
+      <div class="cert-wrapper">
+        <div class="cert-border">
+          <div class="cert-logo">⭐ PyLearn.kz ⭐</div>
+          <div class="cert-title">Аяқтау сертификаты</div>
+          <div class="cert-main-text">Бұл сертификат</div>
+          <div class="cert-name">Оқушы</div>
+          <div class="cert-main-text">келесі курсты сәтті аяқтағанын растайды:</div>
+          <div class="cert-course">🐍 Python тілінде алгоритмдерді программалау</div>
+          <div class="cert-seal">🏅</div>
+          <div class="cert-details">
+            <div class="cert-detail">
+              <div class="cert-detail-label">Күні</div>
+              <div class="cert-detail-value" id="cert-date"></div>
+            </div>
+            <div class="cert-detail">
+              <div class="cert-detail-label">Ұпай</div>
+              <div class="cert-detail-value" id="cert-score"></div>
+            </div>
+            <div class="cert-detail">
+              <div class="cert-detail-label">Деңгей</div>
+              <div class="cert-detail-value">Python Жауынгері</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:2rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+          <button class="btn-primary" onclick="downloadCert()">⬇️ Жүктеу</button>
+          <button class="btn-secondary" onclick="shareCert()">📤 Бөлісу</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="toast-container"></div>
+
+<script>
+// ===================== STATE =====================
+let state = {
+  currentLesson: 0,
+  completedLessons: new Set(JSON.parse(localStorage.getItem('completed') || '[]')),
+  xp: parseInt(localStorage.getItem('xp') || '0'),
+  testScores: JSON.parse(localStorage.getItem('testScores') || '{}'),
+};
+
+function saveState() {
+  localStorage.setItem('completed', JSON.stringify([...state.completedLessons]));
+  localStorage.setItem('xp', state.xp);
+  localStorage.setItem('testScores', JSON.stringify(state.testScores));
+}
+
+// ===================== LESSONS DATA =====================
+const lessons = [
+  {
+    id: 0, title: "Python тіліне кіріспе", icon: "🐍",
+    tag: "Модуль 1",
+    intro: "Python — оңай оқылатын, қуатты бағдарламалау тілі. Ол ғылым, AI, веб-дамыту, автоматизация саласында кеңінен қолданылады.",
+    theory: `<h2>Python дегеніміз не?</h2>
+<p>Python — 1991 жылы Гвидо ван Россум жасаған бағдарламалау тілі. Ол өз қарапайымдылығымен ерекшеленеді — коды ағылшынша сөйлемге ұқсайды.</p>
+<div class="info-box note"><div class="info-box-icon">💡</div><p><strong>Не үшін Python?</strong> NASA, Google, Netflix, Instagram — бәрі Python-ды пайдаланады. Жаңадан үйренушілер үшін ең тиімді тіл!</p></div>
+<h2>Алғашқы бағдарлама</h2>
+<p>Дәстүр бойынша бірінші бағдарлама "Hello, World!" деп шығарады. Python-да бұл өте қарапайым:</p>`,
+    code: `<span class="cm"># Алғашқы Python бағдарламасы</span>
+<span class="fn">print</span>(<span class="str">"Сәлем, Әлем!"</span>)
+
+<span class="cm"># Айнымалылармен жұмыс</span>
+<span class="var">name</span> <span class="op">=</span> <span class="str">"Айдана"</span>
+<span class="var">age</span> <span class="op">=</span> <span class="num">16</span>
+<span class="fn">print</span>(<span class="str">f"Менің атым {name}, жасым {age}"</span>)
+
+<span class="cm"># Математикалық есептеулер</span>
+<span class="var">x</span> <span class="op">=</span> <span class="num">10</span>
+<span class="var">y</span> <span class="op">=</span> <span class="num">3</span>
+<span class="fn">print</span>(<span class="str">"Қосу:"</span>, x <span class="op">+</span> y)
+<span class="fn">print</span>(<span class="str">"Бөлу:"</span>, x <span class="op">/</span> y)
+<span class="fn">print</span>(<span class="str">"Бүтін бөлу:"</span>, x <span class="op">//</span> y)
+<span class="fn">print</span>(<span class="str">"Қалдық:"</span>, x <span class="op">%</span> y)`,
+    task: "print() функциясын пайдаланып өзің туралы 3 жол мәлімет шығаратын бағдарлама жаз. Атыңды, жасыңды және сүйікті пәніңді шығар."
+  },
+  {
+    id: 1, title: "Алгоритм ұғымы", icon: "🔄",
+    tag: "Модуль 2",
+    intro: "Алгоритм — белгілі бір мақсатқа жету үшін орындалатын нақты қадамдардың реттелген тізбегі.",
+    theory: `<h2>Алгоритм дегеніміз не?</h2>
+<p>Күнделікті өмірде де алгоритм бар: таңертеңгі дайындалу, рецепт бойынша тамақ пісіру — бәрі алгоритм. Бағдарламалауда алгоритм — есепті шешу нұсқауы.</p>
+<div class="info-box tip"><div class="info-box-icon">✅</div><p><strong>Жақсы алгоритмнің 4 қасиеті:</strong> Нақтылық · Шектеулілік · Нәтижелілік · Жалпылық</p></div>
+<h2>Мысал: Ең үлкен санды табу</h2>
+<p>Үш санның ішінен ең үлкенін табу алгоритмі — шарттарды қолдану арқылы жүзеге асады:</p>`,
+    code: `<span class="cm"># Алгоритм мысалы: Ең үлкен санды табу</span>
+
+<span class="kw">def</span> <span class="fn">find_max</span>(<span class="var">a</span>, <span class="var">b</span>, <span class="var">c</span>):
+    <span class="cm">"""Үш саннан ең үлкенін тап"""</span>
+    <span class="kw">if</span> <span class="var">a</span> <span class="op">>=</span> <span class="var">b</span> <span class="kw">and</span> <span class="var">a</span> <span class="op">>=</span> <span class="var">c</span>:
+        <span class="kw">return</span> <span class="var">a</span>
+    <span class="kw">elif</span> <span class="var">b</span> <span class="op">>=</span> <span class="var">a</span> <span class="kw">and</span> <span class="var">b</span> <span class="op">>=</span> <span class="var">c</span>:
+        <span class="kw">return</span> <span class="var">b</span>
+    <span class="kw">else</span>:
+        <span class="kw">return</span> <span class="var">c</span>
+
+<span class="cm"># Тексеру</span>
+<span class="fn">print</span>(find_max(<span class="num">15</span>, <span class="num">42</span>, <span class="num">7</span>))   <span class="cm"># 42</span>
+<span class="fn">print</span>(find_max(<span class="num">100</span>, <span class="num">50</span>, <span class="num">75</span>))  <span class="cm"># 100</span>`,
+    task: "Пайдаланушыдан екі санды input() арқылы ал және оларды қосу, азайту, көбейту, бөлу нәтижелерін шығар."
+  },
+  {
+    id: 2, title: "Айнымалылар мен деректер", icon: "📦",
+    tag: "Модуль 3",
+    intro: "Айнымалы — деректерді сақтайтын жады аймағы. Python-да деректердің бірнеше типі бар.",
+    theory: `<h2>Деректер типтері</h2>
+<p>Python-да мәліметтің 4 негізгі типі бар:</p>
+<div class="info-box note"><div class="info-box-icon">📊</div><p><strong>int</strong> — бүтін сан (5, -3, 0) · <strong>float</strong> — ондық бөлшек (3.14) · <strong>str</strong> — мәтін ("сәлем") · <strong>bool</strong> — шындық/жалған (True/False)</p></div>
+<h2>Тізімдер мен сөздіктер</h2>
+<p>Python-да күрделі деректерді сақтауға list (тізім) және dict (сөздік) қолданылады:</p>`,
+    code: `<span class="cm"># Негізгі деректер типтері</span>
+<span class="var">name</span> <span class="op">=</span> <span class="str">"Нұрлан"</span>        <span class="cm"># str</span>
+<span class="var">age</span> <span class="op">=</span> <span class="num">17</span>               <span class="cm"># int</span>
+<span class="var">height</span> <span class="op">=</span> <span class="num">1.75</span>           <span class="cm"># float</span>
+<span class="var">is_student</span> <span class="op">=</span> <span class="bl">True</span>      <span class="cm"># bool</span>
+
+<span class="cm"># Тізім (list)</span>
+<span class="var">grades</span> <span class="op">=</span> [<span class="num">5</span>, <span class="num">4</span>, <span class="num">5</span>, <span class="num">3</span>, <span class="num">5</span>]
+<span class="fn">print</span>(<span class="str">"Бағалар:"</span>, grades)
+<span class="fn">print</span>(<span class="str">"Орташа баға:"</span>, <span class="fn">sum</span>(grades) <span class="op">/</span> <span class="fn">len</span>(grades))
+
+<span class="cm"># Сөздік (dict)</span>
+<span class="var">student</span> <span class="op">=</span> {
+    <span class="str">"аты"</span>: <span class="str">"Нұрлан"</span>,
+    <span class="str">"жасы"</span>: <span class="num">17</span>,
+    <span class="str">"сынып"</span>: <span class="str">"10-А"</span>
+}
+<span class="fn">print</span>(<span class="str">f"Студент: {student['аты']}, {student['сынып']}"</span>)`,
+    task: "5 пәннің бағаларын тізімге сақтап, ең жоғары, ең төменгі және орташа бағаны есептеп шығар."
+  },
+  {
+    id: 3, title: "Шартты операторлар", icon: "🔀",
+    tag: "Модуль 4",
+    intro: "if-elif-else конструкциясы бағдарламаның шешім қабылдауына мүмкіндік береді.",
+    theory: `<h2>Шарттар синтаксисі</h2>
+<p>Python-да шарттар if, elif, else кілт сөздерімен жазылады. Қойылтпа (индентация) өте маңызды!</p>
+<div class="info-box warn"><div class="info-box-icon">⚠️</div><p><strong>Ескерту:</strong> Python-да блоктар {} жақшамен емес, 4 бос орынмен (indent) белгіленеді. Бұл ережені бұзсаң, IndentationError шығады!</p></div>
+<h2>Салыстыру операторлары</h2>
+<p>== (тең), != (тең емес), > (үлкен), < (кіші), >= (үлкен немесе тең), <= (кіші немесе тең)</p>`,
+    code: `<span class="cm"># Баға калькуляторы</span>
+<span class="kw">def</span> <span class="fn">get_grade</span>(<span class="var">score</span>):
+    <span class="kw">if</span> <span class="var">score</span> <span class="op">>=</span> <span class="num">90</span>:
+        <span class="kw">return</span> <span class="str">"5 (Өте жақсы) 🌟"</span>
+    <span class="kw">elif</span> <span class="var">score</span> <span class="op">>=</span> <span class="num">75</span>:
+        <span class="kw">return</span> <span class="str">"4 (Жақсы) 👍"</span>
+    <span class="kw">elif</span> <span class="var">score</span> <span class="op">>=</span> <span class="num">60</span>:
+        <span class="kw">return</span> <span class="str">"3 (Қанағаттанарлық) 🙂"</span>
+    <span class="kw">else</span>:
+        <span class="kw">return</span> <span class="str">"2 (Қанағатсыз) 😔"</span>
+
+<span class="cm"># Тексеру</span>
+<span class="kw">for</span> <span class="var">score</span> <span class="kw">in</span> [<span class="num">95</span>, <span class="num">82</span>, <span class="num">67</span>, <span class="num">45</span>]:
+    <span class="fn">print</span>(<span class="str">f"Балл: {score} → {get_grade(score)}"</span>)`,
+    task: "Жыл санын input()-пен ал және ол жыл кісі жылы ма, жоқ па деп анықтайтын бағдарлама жаз. (Кісі жылы — 12-ге бөлінетін жыл)"
+  },
+  {
+    id: 4, title: "Циклдер", icon: "🔁",
+    tag: "Модуль 5",
+    intro: "Циклдер — бірдей операцияларды қайталауға арналған конструкция. Python-да for және while циклдері бар.",
+    theory: `<h2>for циклі</h2>
+<p>for циклі белгілі бір тізім немесе range бойынша қайталайды. Неше рет айналатыны алдын ала белгілі.</p>
+<div class="info-box tip"><div class="info-box-icon">💡</div><p><strong>range(n)</strong> — 0-ден n-1-ге дейінгі сандар тізімін береді. range(1, 11) — 1-ден 10-ға дейін.</p></div>
+<h2>while циклі</h2>
+<p>while циклі шарт орындалып тұрғанша жұмыс жасайды. Шарт False болғанда тоқтайды.</p>`,
+    code: `<span class="cm"># for циклі — көбейту кестесі</span>
+<span class="fn">print</span>(<span class="str">"=== 7-нің кестесі ==="</span>)
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">11</span>):
+    <span class="fn">print</span>(<span class="str">f"7 × {i} = {7 * i}"</span>)
+
+<span class="cm"># while циклі — факториал</span>
+<span class="kw">def</span> <span class="fn">factorial</span>(<span class="var">n</span>):
+    <span class="var">result</span> <span class="op">=</span> <span class="num">1</span>
+    <span class="kw">while</span> <span class="var">n</span> <span class="op">></span> <span class="num">1</span>:
+        <span class="var">result</span> <span class="op">*=</span> <span class="var">n</span>
+        <span class="var">n</span> <span class="op">-=</span> <span class="num">1</span>
+    <span class="kw">return</span> <span class="var">result</span>
+
+<span class="fn">print</span>(<span class="str">"\n=== Факториал ==="</span>)
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">8</span>):
+    <span class="fn">print</span>(<span class="str">f"{i}! = {factorial(i)}"</span>)`,
+    task: "1-ден 100-ге дейінгі сандардың ішінен тек 3-ке де, 5-ке де бөлінетін сандарды тауып, оларды тізімге жиналық. Нәтижені шығар."
+  },
+  {
+    id: 5, title: "Функциялар", icon: "🔧",
+    tag: "Модуль 6",
+    intro: "Функция — белгілі бір тапсырманы орындайтын кодтың бөлінген блогы. Кодты қайта пайдалануға мүмкіндік береді.",
+    theory: `<h2>Функция анықтамасы</h2>
+<p>def кілт сөзімен функция жасалады. Параметрлер арқылы мәліметтер беріледі, return арқылы нәтиже қайтарылады.</p>
+<div class="info-box note"><div class="info-box-icon">🔄</div><p><strong>Рекурсия</strong> — функцияның өзін-өзі шақыруы. Рекурсияда міндетті түрде базалық жағдай болуы керек!</p></div>
+<h2>Рекурсиялық функция</h2>
+<p>Фибоначчи тізбегі — рекурсияның классикалық мысалы:</p>`,
+    code: `<span class="cm"># Функция мысалдары</span>
+<span class="kw">def</span> <span class="fn">greet</span>(<span class="var">name</span>, <span class="var">lang</span><span class="op">=</span><span class="str">"kk"</span>):
+    <span class="kw">if</span> <span class="var">lang</span> <span class="op">==</span> <span class="str">"kk"</span>:
+        <span class="kw">return</span> <span class="str">f"Сәлем, {name}!"</span>
+    <span class="kw">return</span> <span class="str">f"Hello, {name}!"</span>
+
+<span class="cm"># Рекурсия — Фибоначчи</span>
+<span class="kw">def</span> <span class="fn">fibonacci</span>(<span class="var">n</span>):
+    <span class="kw">if</span> <span class="var">n</span> <span class="op"><=</span> <span class="num">1</span>:
+        <span class="kw">return</span> <span class="var">n</span>
+    <span class="kw">return</span> <span class="fn">fibonacci</span>(<span class="var">n</span><span class="op">-</span><span class="num">1</span>) <span class="op">+</span> <span class="fn">fibonacci</span>(<span class="var">n</span><span class="op">-</span><span class="num">2</span>)
+
+<span class="fn">print</span>(<span class="fn">greet</span>(<span class="str">"Зарина"</span>))
+<span class="fn">print</span>(<span class="fn">greet</span>(<span class="str">"Zarina"</span>, <span class="str">"en"</span>))
+
+<span class="fn">print</span>(<span class="str">"\nФибоначчи тізбегі:"</span>)
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>):
+    <span class="fn">print</span>(<span class="fn">fibonacci</span>(<span class="var">i</span>), <span class="var">end</span><span class="op">=</span><span class="str">" "</span>)`,
+    task: "Санның барлық бөлгіштерін табатын функция жаз. Мысалы, divisors(12) → [1, 2, 3, 4, 6, 12]"
+  },
+  {
+    id: 6, title: "Сұрыптау алгоритмдері", icon: "📊",
+    tag: "Модуль 7",
+    intro: "Сұрыптау — деректерді ретке келтіру процесі. Бірнеше классикалық алгоритмдер бар.",
+    theory: `<h2>Bubble Sort (Көпіршік сұрыптауы)</h2>
+<p>Bubble Sort — ең қарапайым алгоритм. Қатар тұрған элементтерді салыстырып, орындарын ауыстырады. Ең үлкен элемент «көпіршік» сияқты жоғары «қалқып» шығады.</p>
+<div class="info-box note"><div class="info-box-icon">📈</div><p><strong>Күрделілік:</strong> O(n²) — баяу, бірақ оңай түсінікті. Нақты жобаларда Python-ның sorted() функциясы қолданылады (O(n log n)).</p></div>
+<h2>Selection Sort (Таңдау сұрыптауы)</h2>
+<p>Әр қадамда тізімнен ең кіші элементті тауып, басына қояды.</p>`,
+    code: `<span class="cm"># Bubble Sort</span>
+<span class="kw">def</span> <span class="fn">bubble_sort</span>(<span class="var">arr</span>):
+    <span class="var">n</span> <span class="op">=</span> <span class="fn">len</span>(<span class="var">arr</span>)
+    <span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="var">n</span>):
+        <span class="kw">for</span> <span class="var">j</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">0</span>, <span class="var">n</span><span class="op">-</span><span class="var">i</span><span class="op">-</span><span class="num">1</span>):
+            <span class="kw">if</span> <span class="var">arr</span>[<span class="var">j</span>] <span class="op">></span> <span class="var">arr</span>[<span class="var">j</span><span class="op">+</span><span class="num">1</span>]:
+                <span class="var">arr</span>[<span class="var">j</span>], <span class="var">arr</span>[<span class="var">j</span><span class="op">+</span><span class="num">1</span>] <span class="op">=</span> <span class="var">arr</span>[<span class="var">j</span><span class="op">+</span><span class="num">1</span>], <span class="var">arr</span>[<span class="var">j</span>]
+    <span class="kw">return</span> <span class="var">arr</span>
+
+<span class="cm"># Selection Sort</span>
+<span class="kw">def</span> <span class="fn">selection_sort</span>(<span class="var">arr</span>):
+    <span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(<span class="var">arr</span>)):
+        <span class="var">min_idx</span> <span class="op">=</span> <span class="var">i</span>
+        <span class="kw">for</span> <span class="var">j</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="var">i</span><span class="op">+</span><span class="num">1</span>, <span class="fn">len</span>(<span class="var">arr</span>)):
+            <span class="kw">if</span> <span class="var">arr</span>[<span class="var">j</span>] <span class="op"><</span> <span class="var">arr</span>[<span class="var">min_idx</span>]:
+                <span class="var">min_idx</span> <span class="op">=</span> <span class="var">j</span>
+        <span class="var">arr</span>[<span class="var">i</span>], <span class="var">arr</span>[<span class="var">min_idx</span>] <span class="op">=</span> <span class="var">arr</span>[<span class="var">min_idx</span>], <span class="var">arr</span>[<span class="var">i</span>]
+    <span class="kw">return</span> <span class="var">arr</span>
+
+<span class="var">data</span> <span class="op">=</span> [<span class="num">64</span>, <span class="num">25</span>, <span class="num">12</span>, <span class="num">22</span>, <span class="num">11</span>]
+<span class="fn">print</span>(<span class="str">"Бастапқы:"</span>, data)
+<span class="fn">print</span>(<span class="str">"Bubble Sort:"</span>, <span class="fn">bubble_sort</span>(data.<span class="fn">copy</span>()))
+<span class="fn">print</span>(<span class="str">"Selection:"</span>, <span class="fn">selection_sort</span>(data.<span class="fn">copy</span>()))`,
+    task: "Insertion Sort алгоритмін жаз және [5, 3, 8, 1, 9, 2] тізімін сұрыпта. Әр қадамды print() арқылы шығар."
+  },
+  {
+    id: 7, title: "Іздеу алгоритмдері", icon: "🔍",
+    tag: "Модуль 8",
+    intro: "Іздеу алгоритмдері деректер ішінен белгілі бір мәнді табуға арналған.",
+    theory: `<h2>Linear Search (Сызықты іздеу)</h2>
+<p>Тізімді басынан соңына дейін бірбірлеп тексереді. Қарапайым бірақ баяу — O(n).</p>
+<h2>Binary Search (Екілік іздеу)</h2>
+<p>Тек сұрыпталған тізімде жұмыс жасайды. Әр қадамда тізімді екіге бөліп, іздеу аймағын тарылтады. Өте жылдам — O(log n).</p>
+<div class="info-box tip"><div class="info-box-icon">⚡</div><p><strong>Мысал:</strong> 1 000 000 элементтен бір нәрсені табу үшін Linear Search максимум 1 000 000 қадам жасайды. Binary Search — тек 20 қадам!</p></div>`,
+    code: `<span class="cm"># Linear Search</span>
+<span class="kw">def</span> <span class="fn">linear_search</span>(<span class="var">arr</span>, <span class="var">target</span>):
+    <span class="kw">for</span> <span class="var">i</span>, <span class="var">val</span> <span class="kw">in</span> <span class="fn">enumerate</span>(<span class="var">arr</span>):
+        <span class="kw">if</span> <span class="var">val</span> <span class="op">==</span> <span class="var">target</span>:
+            <span class="kw">return</span> <span class="var">i</span>
+    <span class="kw">return</span> <span class="op">-</span><span class="num">1</span>
+
+<span class="cm"># Binary Search</span>
+<span class="kw">def</span> <span class="fn">binary_search</span>(<span class="var">arr</span>, <span class="var">target</span>):
+    <span class="var">left</span>, <span class="var">right</span> <span class="op">=</span> <span class="num">0</span>, <span class="fn">len</span>(<span class="var">arr</span>) <span class="op">-</span> <span class="num">1</span>
+    <span class="kw">while</span> <span class="var">left</span> <span class="op"><=</span> <span class="var">right</span>:
+        <span class="var">mid</span> <span class="op">=</span> (<span class="var">left</span> <span class="op">+</span> <span class="var">right</span>) <span class="op">//</span> <span class="num">2</span>
+        <span class="kw">if</span> <span class="var">arr</span>[<span class="var">mid</span>] <span class="op">==</span> <span class="var">target</span>:
+            <span class="kw">return</span> <span class="var">mid</span>
+        <span class="kw">elif</span> <span class="var">arr</span>[<span class="var">mid</span>] <span class="op"><</span> <span class="var">target</span>:
+            <span class="var">left</span> <span class="op">=</span> <span class="var">mid</span> <span class="op">+</span> <span class="num">1</span>
+        <span class="kw">else</span>:
+            <span class="var">right</span> <span class="op">=</span> <span class="var">mid</span> <span class="op">-</span> <span class="num">1</span>
+    <span class="kw">return</span> <span class="op">-</span><span class="num">1</span>
+
+<span class="var">numbers</span> <span class="op">=</span> [<span class="num">2</span>, <span class="num">5</span>, <span class="num">8</span>, <span class="num">12</span>, <span class="num">16</span>, <span class="num">23</span>, <span class="num">38</span>, <span class="num">56</span>]
+<span class="fn">print</span>(<span class="str">"Linear (23):"</span>, <span class="fn">linear_search</span>(numbers, <span class="num">23</span>))  <span class="cm"># 5</span>
+<span class="fn">print</span>(<span class="str">"Binary (23):"</span>, <span class="fn">binary_search</span>(numbers, <span class="num">23</span>))  <span class="cm"># 5</span>`,
+    task: "Binary Search-тың рекурсиялық нұсқасын жаз. Функция сигнатурасы: binary_search_recursive(arr, target, left, right)"
+  },
+  {
+    id: 8, title: "Практикалық есептер", icon: "🎯",
+    tag: "Модуль 9",
+    intro: "Осы модульде барлық білімді біріктіреміз және нақты есептерді шешеміз.",
+    theory: `<h2>Финалдық жоба</h2>
+<p>Осы бөлімде алған барлық біліміңді қолданып нақты есептерді шешесің. Бұл — курстың ең маңызды бөлімі!</p>
+<div class="info-box tip"><div class="info-box-icon">🚀</div><p>Есептерді өз бетінше шеш, қиын жерде AI Көмекшіден кеңес ал. Ең бастысы — өз кодыңды жазу!</p></div>
+<h2>Жоба: Студент бағалау жүйесі</h2>
+<p>Студенттер тізімін сұрыптап, статистика шығаратын жүйе:</p>`,
+    code: `<span class="cm"># Финалдық жоба: Студент бағалау жүйесі</span>
+
+<span class="var">students</span> <span class="op">=</span> [
+    {<span class="str">"ат"</span>: <span class="str">"Айгерім"</span>, <span class="str">"баллдар"</span>: [<span class="num">95</span>, <span class="num">88</span>, <span class="num">92</span>]},
+    {<span class="str">"ат"</span>: <span class="str">"Бекзат"</span>,  <span class="str">"баллдар"</span>: [<span class="num">75</span>, <span class="num">82</span>, <span class="num">79</span>]},
+    {<span class="str">"ат"</span>: <span class="str">"Гүлнәр"</span>, <span class="str">"баллдар"</span>: [<span class="num">60</span>, <span class="num">55</span>, <span class="num">70</span>]},
+    {<span class="str">"ат"</span>: <span class="str">"Дастан"</span>,  <span class="str">"баллдар"</span>: [<span class="num">99</span>, <span class="num">97</span>, <span class="num">98</span>]},
+]
+
+<span class="kw">def</span> <span class="fn">average</span>(<span class="var">scores</span>):
+    <span class="kw">return</span> <span class="fn">sum</span>(<span class="var">scores</span>) <span class="op">/</span> <span class="fn">len</span>(<span class="var">scores</span>)
+
+<span class="cm"># Орташа балл есептеу + сұрыптау</span>
+<span class="kw">for</span> <span class="var">s</span> <span class="kw">in</span> <span class="var">students</span>:
+    <span class="var">s</span>[<span class="str">"орта"</span>] <span class="op">=</span> <span class="fn">average</span>(<span class="var">s</span>[<span class="str">"баллдар"</span>])
+
+<span class="var">ranked</span> <span class="op">=</span> <span class="fn">sorted</span>(<span class="var">students</span>, <span class="var">key</span><span class="op">=</span><span class="kw">lambda</span> <span class="var">x</span>: <span class="var">x</span>[<span class="str">"орта"</span>], <span class="var">reverse</span><span class="op">=</span><span class="bl">True</span>)
+
+<span class="fn">print</span>(<span class="str">"=== РЕЙТИНГ ==="</span>)
+<span class="kw">for</span> <span class="var">i</span>, <span class="var">s</span> <span class="kw">in</span> <span class="fn">enumerate</span>(<span class="var">ranked</span>, <span class="num">1</span>):
+    <span class="fn">print</span>(<span class="str">f"{i}. {s['ат']}: {s['орта']:.1f}"</span>)`,
+    task: "Калькулятор бағдарламасын жаз. Пайдаланушы екі сан мен (+, -, *, /) операциясын енгізеді. Нәтижені шығар. Нөлге бөлу жағдайын өңде."
+  }
+];
+
+// ===================== QUIZ DATA =====================
+const quizzes = {
+  0: {
+    title: "Python кіріспе",
+    questions: [
+      { q: "Python-да экранға мәтін шығаратын функция қандай?", opts: ["input()", "print()", "output()", "display()"], ans: 1 },
+      { q: "Python-да пікір (comment) қалай жазылады?", opts: ["// пікір", "/* пікір */", "# пікір", "-- пікір"], ans: 2 },
+      { q: "x = 10; y = 3; print(x // y) нәтижесі?", opts: ["3.33", "3", "4", "0"], ans: 1 },
+      { q: "Python-да жолды (string) қалай анықтаймыз?", opts: ["name = Айдана", "name = 'Айдана'", "name := Айдана", "string name = Айдана"], ans: 1 },
+      { q: "f-string дегеніміз не?", opts: ["Файлдарды оқу", "Форматтық жол (f'сәлем {name}')", "Функция жасау", "Float типі"], ans: 1 },
+    ]
+  },
+  1: {
+    title: "Алгоритмдер",
+    questions: [
+      { q: "Алгоритмнің қандай қасиеті болмаса ол алгоритм болмайды?", opts: ["Тез орындалуы", "Нақты және шектеулі болуы", "Python-да жазылуы", "Компьютерде орындалуы"], ans: 1 },
+      { q: "Блок-схемада ромб (лозунг) фигурасы нені білдіреді?", opts: ["Процесс", "Шешім (условие)", "Бастама", "Деректер"], ans: 1 },
+      { q: "O(n²) деген не?", opts: ["Оңтайлы алгоритм", "Күрделілік — n-ге квадраттық тәуелділік", "Нөл уақыт", "Рекурсия"], ans: 1 },
+      { q: "Псевдокод дегеніміз не?", opts: ["Жасырын код", "Алгоритмді табиғи тілде жазу", "Python коды", "Қате код"], ans: 1 },
+      { q: "Алгоритмде 'BASE CASE' не үшін керек?", opts: ["Жылдамдату", "Рекурсияны тоқтату", "Баспа", "Сұрыптау"], ans: 1 },
+    ]
+  },
+  4: {
+    title: "Циклдер",
+    questions: [
+      { q: "for i in range(5): нәтижесінде i қандай мәндерді алады?", opts: ["1,2,3,4,5", "0,1,2,3,4", "0,1,2,3,4,5", "1,2,3,4"], ans: 1 },
+      { q: "while True: break — бұл код не жасайды?", opts: ["Шексіз цикл", "Бірден тоқтайды (break-тен)", "Қате береді", "Ешнәрсе жасамайды"], ans: 1 },
+      { q: "continue операторы не жасайды?", opts: ["Циклді тоқтатады", "Ағымдағы итерацияны өткізіп, жалғастырады", "Функциядан шығады", "Бағдарламаны тоқтатады"], ans: 1 },
+      { q: "range(1, 10, 2) қандай сандарды береді?", opts: ["1,3,5,7,9", "1,2,3,...,10", "2,4,6,8,10", "0,2,4,6,8"], ans: 0 },
+      { q: "for циклі мен while циклінің айырмашылығы?", opts: ["Ешқандай айырмашылық жоқ", "for белгілі санда, while шарт бойынша", "while жылдамырақ", "for тек сандарда жұмыс жасайды"], ans: 1 },
+    ]
+  },
+  6: {
+    title: "Сұрыптау",
+    questions: [
+      { q: "Bubble Sort алгоритмінің уақыттық күрделілігі?", opts: ["O(n)", "O(n log n)", "O(n²)", "O(1)"], ans: 2 },
+      { q: "Selection Sort қалай жұмыс жасайды?", opts: ["Кezdeysoq таңдайды", "Ең кішіні тауып, алдыға қояды", "Екіге бөледі", "Köршіні салыстырады"], ans: 1 },
+      { q: "Python-дың кіріктірілген sorted() функциясының күрделілігі?", opts: ["O(n²)", "O(n)", "O(n log n)", "O(log n)"], ans: 2 },
+      { q: "Merge Sort қалай жұмыс жасайды?", opts: ["Bubble принципі", "Бөліп, біріктіреді (divide & conquer)", "Таңдайды", "Кездейсоқ орналастырады"], ans: 1 },
+      { q: "[3,1,4,1,5,9] тізімін Bubble Sort-пен бір өткеннен кейін?", opts: ["[1,1,3,4,5,9]", "[1,3,4,1,5,9]", "[3,1,4,1,5,9]", "[1,3,1,4,5,9]"], ans: 1 },
+    ]
+  },
+};
+
+// ===================== CHALLENGES =====================
+const challenges = [
+  { title: "Сандар қосындысы", desc: "1-ден n-ге дейінгі сандар қосындысын тап", diff: "Оңай", code: "# n санын енгізіп, 1-ден n-ге дейін қос\nn = 10\n# Кодыңды осында жаз:\n" },
+  { title: "Палиндром тексеру", desc: "Сөз немесе сан палиндром ма екенін анықта", diff: "Оңай", code: "# Палиндром — кері оқыса да сол\n# Мысал: 'level', 121\nword = 'level'\n# Кодыңды осында жаз:\n" },
+  { title: "Жұп/Тақ сандар", desc: "1-100 аралығындағы жұп сандарды тізімге жина", diff: "Оңай", code: "# 1-ден 100-ге дейін жұп сандарды тап\n# List Comprehension пайдалан!\n" },
+  { title: "FizzBuzz", desc: "1-30: 3-ке бөлінсе Fizz, 5-ке FizzBuzz", diff: "Орташа", code: "# Классикалық FizzBuzz есебі\nfor i in range(1, 31):\n    # Кодыңды осында жаз\n    pass\n" },
+  { title: "Сан санау", desc: "Тізімдегі оң, теріс, нөл сандарды санамаш", diff: "Орташа", code: "numbers = [1,-2,3,0,-5,4,-1,0,2,-3]\n# Оң, теріс, нөл санын тап\n" },
+  { title: "Matrix транспозиция", desc: "2D матрицаның транспозасын жаса", diff: "Күрделі", code: "matrix = [[1,2,3],[4,5,6],[7,8,9]]\n# Транспозицияны жаз\n# Нәтиже: [[1,4,7],[2,5,8],[3,6,9]]\n" },
+];
+
+let currentChallenge = 0;
+
+// ===================== AI RESPONSES =====================
+const aiResponses = {
+  "for цикл": `**for циклі** — белгілі бір аралықта немесе тізімде қайталайды! 🔁\n\nСинтаксис:\n\`\`\`python\nfor i in range(5):\n    print(i)  # 0, 1, 2, 3, 4\n\`\`\`\n\nТізімде:\n\`\`\`python\nfruits = ["алма", "алмұрт"]\nfor fruit in fruits:\n    print(fruit)\n\`\`\`\n\nrange(start, stop, step) — бастап, дейін, қадам`,
+  "bubble sort": `**Bubble Sort** — ең қарапайым сұрыптау алгоритмі! 📊\n\nПринципі: қатар тұрған екі элементті салыстырып, қажет болса орындарын ауыстырады. Үлкен элемент «жоғары қалқиды».\n\n\`\`\`python\ndef bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n    return arr\n\`\`\`\n\nКүрделілігі: O(n²) — баяу, бірақ оңай!`,
+  "функция": `**Функция** — кодтың қайта қолданылатын блогы! 🔧\n\n\`\`\`python\ndef greet(name, age):\n    \"\"\"Функция сипаттамасы\"\"\"\n    return f"Сәлем, {name}! Жасың: {age}"\n\n# Шақыру\nresult = greet("Айдана", 16)\nprint(result)\n\`\`\`\n\n**Параметрлер** — функцияға беретін мәліметтер\n**return** — функция нәтижесін қайтарады\n**Дефолт мән:** def greet(name, lang="kk")`,
+  "рекурсия": `**Рекурсия** — функцияның өзін-өзі шақыруы! 🔄\n\nМаңызды: базалық жағдай (base case) болмаса — шексіз цикл!\n\n\`\`\`python\ndef factorial(n):\n    # Базалық жағдай\n    if n <= 1:\n        return 1\n    # Рекурсивті шақыру\n    return n * factorial(n - 1)\n\nprint(factorial(5))  # 120\n# 5 × 4 × 3 × 2 × 1 = 120\n\`\`\``,
+  "list": `**list vs dict** айырмашылығы:\n\n**list (тізім)** — реттелген, индекс арқылы:\n\`\`\`python\nfruits = ["алма", "алмұрт", "жүзім"]\nprint(fruits[0])  # "алма"\nfruits.append("банан")\n\`\`\`\n\n**dict (сөздік)** — кілт-мән жұптары:\n\`\`\`python\nstudent = {"ат": "Нұрлан", "жас": 17}\nprint(student["ат"])  # "Нұрлан"\nstudent["сынып"] = "10-А"\n\`\`\`\n\n✅ list — ретті деректер үшін\n✅ dict — аталған деректер үшін`,
+};
+
+// ===================== NAV =====================
+function showSection(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('nav-' + id)?.classList.add('active');
+
+  if (id === 'lessons') renderLesson(state.currentLesson);
+  if (id === 'progress') renderProgress();
+  if (id === 'test') renderTestSelect();
+  if (id === 'certificate') renderCertificate();
+  if (id === 'interactive') renderChallenges();
+}
+
+function openLesson(idx) {
+  state.currentLesson = idx;
+  showSection('lessons');
+}
+
+// ===================== LESSONS =====================
+function renderSidebar() {
+  const cont = document.getElementById('sidebar-items');
+  cont.innerHTML = lessons.map((l, i) => `
+    <div class="sidebar-item ${i === state.currentLesson ? 'active' : ''} ${state.completedLessons.has(i) ? 'completed' : ''}"
+         onclick="loadLesson(${i})">
+      <div class="lesson-dot"></div>
+      <span>${l.icon} ${l.title}</span>
+      ${state.completedLessons.has(i) ? '<span class="check">✓</span>' : ''}
+    </div>
+  `).join('');
+}
+
+function renderLesson(idx) {
+  const l = lessons[idx];
+  state.currentLesson = idx;
+  renderSidebar();
+
+  const body = document.getElementById('lesson-body');
+  body.innerHTML = `
+    <div class="lesson-header">
+      <div class="lesson-tag">${l.tag} · ${l.icon}</div>
+      <h1>${l.title}</h1>
+      <p style="color:var(--text2);font-size:0.95rem;line-height:1.7;">${l.intro}</p>
+    </div>
+
+    ${l.theory}
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">Python</span>
+        <button class="copy-btn" onclick="copyCode(this)">📋 Көшіру</button>
+      </div>
+      <pre>${l.code}</pre>
+    </div>
+
+    <div class="task-box">
+      <h4>⚡ Практикалық тапсырма</h4>
+      <p>${l.task}</p>
+    </div>
+
+    <div class="lesson-nav">
+      ${idx > 0 ? `<button class="btn-lesson" onclick="loadLesson(${idx-1})">← Алдыңғы</button>` : '<div></div>'}
+      <button class="btn-complete" onclick="completeLesson(${idx})">
+        ${state.completedLessons.has(idx) ? '✓ Өтілді' : '✅ Өтілді деп белгіле'}
+      </button>
+      ${idx < lessons.length-1 ? `<button class="btn-lesson" onclick="loadLesson(${idx+1})">Келесі →</button>` : '<div></div>'}
+    </div>
+  `;
+}
+
+function loadLesson(idx) {
+  renderLesson(idx);
+}
+
+function completeLesson(idx) {
+  if (!state.completedLessons.has(idx)) {
+    state.completedLessons.add(idx);
+    state.xp += 50;
+    saveState();
+    updateXPDisplay();
+    showToast('✅ Сабақ аяқталды! +50 XP', 'success');
+    renderLesson(idx);
+  }
+}
+
+function copyCode(btn) {
+  btn.textContent = '✓ Көшірілді!';
+  setTimeout(() => btn.textContent = '📋 Көшіру', 2000);
+}
+
+// ===================== INTERACTIVE =====================
+function renderChallenges() {
+  const grid = document.getElementById('challenges-grid');
+  grid.innerHTML = challenges.map((c, i) => `
+    <div class="challenge-card" onclick="loadChallenge(${i})">
+      <h4>${c.title}</h4>
+      <p>${c.desc}</p>
+      <span class="diff-badge ${c.diff==='Оңай'?'tag-easy':c.diff==='Орташа'?'tag-med':'tag-hard'}">${c.diff}</span>
+    </div>
+  `).join('');
+}
+
+function loadChallenge(idx) {
+  currentChallenge = idx;
+  document.getElementById('code-editor').value = challenges[idx].code;
+  document.getElementById('code-output').textContent = `▶ "${challenges[idx].title}" тапсырмасы жүктелді. Кодыңды жазып, іске қос!`;
+}
+
+function runCode() {
+  const code = document.getElementById('code-editor').value;
+  const output = document.getElementById('code-output');
+  
+  output.style.color = '#c3e88d';
+  
+  try {
+    let result = '';
+    const originalLog = console.log;
+    const logs = [];
+    
+    // Simple Python-like simulation
+    const lines = code.split('\n');
+    const variables = {};
+    const printLines = [];
+    
+    // Basic Python emulation
+    const jsCode = code
+      .replace(/^#.*$/gm, '')
+      .replace(/print\((.*?)\)/g, (m, args) => `__output.push(String(${args.replace(/f"([^"]*)"/, (m, s) => {
+        return '"' + s.replace(/\{([^}]+)\}/g, '" + ($1) + "') + '"';
+      })}))`)
+      .replace(/def (\w+)\((.*?)\):/g, 'function $1($2) {')
+      .replace(/^\s*if (.*?):/gm, 'if ($1) {')
+      .replace(/^\s*elif (.*?):/gm, '} else if ($1) {')
+      .replace(/^\s*else:/gm, '} else {')
+      .replace(/^\s*for (\w+) in range\((\d+),?\s*(\d+)?,?\s*(\d+)?\):/gm, (m, v, a, b, c) => {
+        if (b && c) return `for (let ${v}=${a}; ${v}<${b}; ${v}+=${c}) {`;
+        if (b) return `for (let ${v}=${a}; ${v}<${b}; ${v}++) {`;
+        return `for (let ${v}=0; ${v}<${a}; ${v}++) {`;
+      })
+      .replace(/\band\b/g, '&&').replace(/\bor\b/g, '||').replace(/\bnot\b/g, '!');
+
+    const __output = [];
+    try {
+      new Function('__output', jsCode)(__output);
+      result = __output.join('\n') || '(нәтиже жоқ)';
+    } catch(e) {
+      result = '⚠️ Орындау қатесі: ' + e.message;
+      output.style.color = '#f87171';
+    }
+    
+    output.textContent = result || '(нәтиже жоқ)';
+  } catch(e) {
+    output.style.color = '#f87171';
+    output.textContent = '❌ Қате: ' + e.message;
+  }
+}
+
+function clearCode() {
+  document.getElementById('code-editor').value = '';
+  document.getElementById('code-output').textContent = '▶ Кодты жазып, іске қосыңыз...';
+}
+
+// ===================== AI ASSISTANT =====================
+function sendMessage() {
+  const input = document.getElementById('ai-input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  addMessage(text, 'user');
+  input.value = '';
+
+  // Typing indicator
+  const typingId = addTyping();
+  
+  setTimeout(() => {
+    removeTyping(typingId);
+    const response = getAIResponse(text);
+    addMessage(response, 'ai');
+  }, 1200 + Math.random() * 800);
+}
+
+function quickAsk(text) {
+  document.getElementById('ai-input').value = text;
+  sendMessage();
+}
+
+function handleEnter(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function addMessage(text, role) {
+  const messages = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = `message ${role}`;
+  
+  const formatted = text.replace(/```python\n([\s\S]*?)```/g, (m, code) => 
+    `</div><div class="msg-code">${code}</div><div style="display:none">`
+  ).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  
+  div.innerHTML = `
+    <div class="msg-avatar ${role}">${role === 'ai' ? '🤖' : '👤'}</div>
+    <div class="msg-bubble">${formatted.replace(/\n/g, '<br>').replace(/`([^`]+)`/g, '<code style="background:#060a14;padding:0.1rem 0.4rem;border-radius:3px;font-family:var(--font-mono);font-size:0.85em;">$1</code>')}</div>
+  `;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function addTyping() {
+  const messages = document.getElementById('messages');
+  const id = 'typing-' + Date.now();
+  const div = document.createElement('div');
+  div.className = 'message ai';
+  div.id = id;
+  div.innerHTML = `
+    <div class="msg-avatar ai">🤖</div>
+    <div class="msg-bubble">
+      <span class="typing-dot"></span>
+      <span class="typing-dot"></span>
+      <span class="typing-dot"></span>
+    </div>
+  `;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+  return id;
+}
+
+function removeTyping(id) {
+  document.getElementById(id)?.remove();
+}
+
+function getAIResponse(text) {
+  const t = text.toLowerCase();
+  
+  if (t.includes('for цикл') || t.includes('for loop')) return aiResponses['for цикл'];
+  if (t.includes('bubble') || t.includes('сұрыпт')) return aiResponses['bubble sort'];
+  if (t.includes('функция') || t.includes('def ')) return aiResponses['функция'];
+  if (t.includes('рекурсия') || t.includes('өзін-өзі')) return aiResponses['рекурсия'];
+  if (t.includes('list') || t.includes('dict') || t.includes('тізім')) return aiResponses['list'];
+  
+  if (t.includes('while')) return `**while циклі** шарт шын болғанша жұмыс жасайды:\n\n\`\`\`python\ncount = 0\nwhile count < 5:\n    print(count)\n    count += 1\n\`\`\`\n\n⚠️ break — циклді тоқтатады\n⚠️ continue — ағымдағы итерацияны өткізеді`;
+  
+  if (t.includes('binary search') || t.includes('екілік іздеу')) return `**Binary Search** — тез іздеу алгоритмі! ⚡\n\nTек **сұрыпталған** тізімде жұмыс жасайды. Орта элементті тексеріп, іздеу аймағын екіге бөледі.\n\n\`\`\`python\ndef binary_search(arr, target):\n    left, right = 0, len(arr)-1\n    while left <= right:\n        mid = (left+right)//2\n        if arr[mid] == target: return mid\n        elif arr[mid] < target: left = mid+1\n        else: right = mid-1\n    return -1\n\`\`\`\n\nКүрделілігі: **O(log n)** — өте жылдам!`;
+  
+  if (t.includes('сәлем') || t.includes('hello') || t.includes('hi')) return `Сәлем! 👋 Python оқуда сәттілік тілеймін!\n\nМен Python, алгоритмдер, деректер құрылымдары туралы кез келген сұрағыңа жауап бере аламын. Не білгің келеді?`;
+  
+  if (t.includes('қате') || t.includes('error') || t.includes('ошибка')) return `Кодыңды жіберсең, қателерді бірге талдаймыз! 🔍\n\n**Жиі кездесетін Python қателері:**\n\n• **SyntaxError** — синтаксис қатесі (жаңылыс жазылған)\n• **IndentationError** — дұрыс сызықтаспаған\n• **NameError** — анықталмаған айнымалы\n• **TypeError** — деректер типі сәйкес емес\n• **ZeroDivisionError** — нөлге бөлу\n\nКодыңды осы чатқа жазып жібер!`;
+  
+  return `Өте жақсы сұрақ! 🤔\n\n"**${text}**" туралы сұрадың.\n\nПython-да бұл тақырып бойынша мен саған мыналарды ұсынамын:\n\n1. Алдымен тиісті сабақты оқы (Сабақтар бөлімі)\n2. Код мысалдарын интерактивті редакторда сынап көр\n3. Практикалық тапсырмаларды орында\n\nНақтырақ сұрақ қойсаң — толық жауап беремін! Мысалы: "for цикл мысал", "binary search түсіндір" деп сұра.`;
+}
+
+// ===================== PROGRESS =====================
+function renderProgress() {
+  const completed = state.completedLessons.size;
+  const total = lessons.length;
+  const pct = Math.round((completed / total) * 100);
+
+  document.getElementById('stat-completed').textContent = completed;
+  document.getElementById('stat-xp').textContent = state.xp;
+  document.getElementById('stat-streak').textContent = Math.min(completed, 7);
+  document.getElementById('overall-pct').textContent = pct + '%';
+  document.getElementById('overall-bar').style.width = pct + '%';
+
+  // Module progress
+  const list = document.getElementById('module-progress-list');
+  list.innerHTML = lessons.map((l, i) => {
+    const done = state.completedLessons.has(i);
+    return `
+      <div class="module-progress-item">
+        <div class="mp-icon">${l.icon}</div>
+        <div class="mp-name">${l.title}</div>
+        <div class="mp-bar-bg"><div class="mp-bar-fill" style="width:${done?100:0}%"></div></div>
+        <div class="mp-pct">${done?'100':'0'}%</div>
+        <div class="mp-status">${done?'✅':'⭕'}</div>
+      </div>
+    `;
+  }).join('');
+
+  // Badges
+  const badges = [
+    { icon: '🐣', name: 'Бастама', cond: completed >= 1 },
+    { icon: '⚡', name: 'Белсенді', cond: completed >= 3 },
+    { icon: '🔥', name: 'Оттай', cond: completed >= 5 },
+    { icon: '🏃', name: 'Жылдам', cond: state.xp >= 200 },
+    { icon: '🧠', name: 'Ақылды', cond: completed >= 7 },
+    { icon: '🐍', name: 'Python', cond: completed >= 9 },
+    { icon: '🏆', name: 'Чемпион', cond: completed === total },
+    { icon: '💎', name: 'Бриллиант', cond: state.xp >= 500 },
+  ];
+  
+  document.getElementById('badges-grid').innerHTML = badges.map(b => `
+    <div class="badge-item ${b.cond?'earned':''}">
+      <span class="badge-icon">${b.icon}</span>
+      <div class="badge-name">${b.name}</div>
+    </div>
+  `).join('');
+
+  updateXPDisplay();
+}
+
+function updateXPDisplay() {
+  document.getElementById('xp-display').textContent = state.xp;
+  const level = Math.floor(state.xp / 100) + 1;
+  document.getElementById('level-display').textContent = `Деңгей ${level}`;
+}
+
+// ===================== TEST =====================
+let currentQuiz = null;
+let currentQ = 0;
+let score = 0;
+let selectedAnswer = null;
+
+function renderTestSelect() {
+  const modules = [
+    { id: 0, title: "Python кіріспе", icon: "🐍", count: 5 },
+    { id: 1, title: "Алгоритмдер", icon: "🔄", count: 5 },
+    { id: 4, title: "Циклдер", icon: "🔁", count: 5 },
+    { id: 6, title: "Сұрыптау", icon: "📊", count: 5 },
+  ];
+  
+  document.getElementById('test-select-area').style.display = 'block';
+  document.getElementById('quiz-area').style.display = 'none';
+  document.getElementById('result-area').style.display = 'none';
+  
+  document.getElementById('test-module-select').innerHTML = modules.map(m => `
+    <div class="test-module-card" onclick="startQuiz(${m.id})">
+      <span class="test-icon">${m.icon}</span>
+      <h4>${m.title}</h4>
+      <p>${m.count} сұрақ</p>
+      ${state.testScores[m.id] ? `<div style="color:var(--accent3);font-size:0.8rem;margin-top:0.25rem;">✓ ${state.testScores[m.id]}%</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function startQuiz(moduleId) {
+  currentQuiz = quizzes[moduleId];
+  currentQuiz._id = moduleId;
+  currentQ = 0;
+  score = 0;
+  selectedAnswer = null;
+  
+  document.getElementById('test-select-area').style.display = 'none';
+  document.getElementById('quiz-area').style.display = 'block';
+  document.getElementById('result-area').style.display = 'none';
+  
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = currentQuiz.questions[currentQ];
+  const total = currentQuiz.questions.length;
+  const pct = (currentQ / total) * 100;
+  
+  document.getElementById('quiz-progress-fill').style.width = pct + '%';
+  document.getElementById('question-num').textContent = `Сұрақ ${currentQ+1}/${total}`;
+  document.getElementById('question-text').textContent = q.q;
+  document.getElementById('btn-next').classList.remove('show');
+  selectedAnswer = null;
+  
+  document.getElementById('options-area').innerHTML = q.opts.map((opt, i) => `
+    <button class="option-btn" onclick="selectAnswer(${i})">${opt}</button>
+  `).join('');
+}
+
+function selectAnswer(idx) {
+  if (selectedAnswer !== null) return;
+  selectedAnswer = idx;
+  
+  const q = currentQuiz.questions[currentQ];
+  const btns = document.querySelectorAll('.option-btn');
+  
+  btns[q.ans].classList.add('correct');
+  if (idx !== q.ans) btns[idx].classList.add('wrong');
+  else {
+    score++;
+    state.xp += 20;
+    saveState();
+    updateXPDisplay();
+  }
+  
+  document.getElementById('btn-next').classList.add('show');
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= currentQuiz.questions.length) {
+    showResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResult() {
+  const total = currentQuiz.questions.length;
+  const pct = Math.round((score / total) * 100);
+  
+  state.testScores[currentQuiz._id] = pct;
+  saveState();
+  
+  document.getElementById('quiz-area').style.display = 'none';
+  document.getElementById('result-area').style.display = 'block';
+  
+  const circle = document.querySelector('.result-circle');
+  circle.style.setProperty('--score', pct);
+  circle.style.background = `conic-gradient(var(--accent) ${pct*3.6}deg, var(--bg3) 0)`;
+  
+  document.getElementById('result-pct').textContent = pct + '%';
+  
+  const msgs = ['Өте жақсы! 🌟', 'Жақсы нәтиже! 👍', 'Жаман емес 🙂', 'Тағы оқу керек 📚'];
+  const msg = pct >= 90 ? msgs[0] : pct >= 70 ? msgs[1] : pct >= 50 ? msgs[2] : msgs[3];
+  
+  document.getElementById('result-msg').textContent = msg;
+  document.getElementById('result-sub').textContent = `${score}/${total} дұрыс · ${pct >= 70 ? '+' + pct + ' XP' : 'Тағы бір рет тырыс!'}`;
+  
+  if (pct >= 70) showToast(`🎉 Тест аяқталды! ${pct}%`, 'success');
+}
+
+function restartQuiz() {
+  startQuiz(currentQuiz._id);
+}
+
+function backToSelect() {
+  renderTestSelect();
+}
+
+// ===================== CERTIFICATE =====================
+function renderCertificate() {
+  const completed = state.completedLessons.size;
+  const total = lessons.length;
+  const testsDone = Object.keys(state.testScores).length;
+  const avgScore = testsDone > 0 ? Math.round(Object.values(state.testScores).reduce((a,b)=>a+b,0)/testsDone) : 0;
+  
+  const requirements = [
+    { text: `${completed}/${total} сабақ өтілді`, done: completed >= 7 },
+    { text: `${testsDone}/4 тест тапсырылды`, done: testsDone >= 2 },
+    { text: `Орташа тест балы: ${avgScore}% (70%+ керек)`, done: avgScore >= 70 },
+    { text: `${state.xp} XP жиналды (200+ керек)`, done: state.xp >= 200 },
+  ];
+  
+  const isUnlocked = completed >= 7 && testsDone >= 2 && avgScore >= 70 && state.xp >= 200;
+  
+  document.getElementById('cert-requirements').innerHTML = requirements.map(r => `
+    <div class="cert-req ${r.done?'done':''}">
+      <span class="req-icon">${r.done?'✅':'⭕'}</span>
+      <span>${r.text}</span>
+    </div>
+  `).join('');
+  
+  if (isUnlocked) {
+    document.getElementById('cert-locked-view').style.display = 'none';
+    document.getElementById('cert-unlocked-view').style.display = 'block';
+    document.getElementById('cert-date').textContent = new Date().toLocaleDateString('kk-KZ');
+    document.getElementById('cert-score').textContent = avgScore + '%';
+  } else {
+    document.getElementById('cert-locked-view').style.display = 'block';
+    document.getElementById('cert-unlocked-view').style.display = 'none';
+  }
+}
+
+function downloadCert() { showToast('📄 Сертификат жүктелуде...', 'info'); }
+function shareCert() { showToast('📤 Сілтеме көшірілді!', 'success'); }
+
+// ===================== TOAST =====================
+function showToast(msg, type='info') {
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.textContent = msg;
+  document.getElementById('toast-container').appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+// ===================== INIT =====================
+function init() {
+  renderLesson(0);
+  updateXPDisplay();
+  renderChallenges();
+}
+
+init();
+</script>
+</body>
+</html>
